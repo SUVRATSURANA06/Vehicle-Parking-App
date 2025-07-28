@@ -1,3 +1,0 @@
-Reservation ID,Parking Lot,Spot Number,Vehicle Number,Start Time,End Time,Duration (Hours),Cost (₹),Status,Created
-3,AIRPORT,AIRPORT-006,MP12CY1234,2025-07-14 16:20:22,2025-07-23 17:28:01,217.13,₹10856.35,completed,2025-07-14 16:20:22
-7,COURT,COURT-006,MP98YT2345,2025-07-23 17:28:16,N/A,0.0,₹0.00,active,2025-07-23 17:28:16
