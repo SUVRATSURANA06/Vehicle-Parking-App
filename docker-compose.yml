@@ -1,0 +1,53 @@
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+      - MAIL_SERVER=mailhog
+      - MAIL_PORT=1025
+      - MAIL_DEFAULT_SENDER=noreply@parking.com
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+      - mailhog
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - VITE_API_URL=http://localhost:5000
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: ./backend
+    command: celery -A tasks.celery worker --loglevel=info
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - backend
+      - redis
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI 
